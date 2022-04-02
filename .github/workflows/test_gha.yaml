@@ -8,6 +8,12 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - name: Get Token
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            console.log(token);
       - name: AWS Auth
         uses: aws-actions/configure-aws-credentials@master
         with:
