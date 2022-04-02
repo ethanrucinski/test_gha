@@ -20,7 +20,8 @@ jobs:
         run: |
           aws sts assume-role-with-web-identity --role-arn arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266 \
           --role-session-name GithubActions \
-          --web-identity-token ${{ steps.get-token.outputs.result }}
+          --web-identity-token ${{ steps.get-token.outputs.result }} \
+          --region us-east-2
           aws sts get-caller-identity
       - name: AWS Auth
         uses: aws-actions/configure-aws-credentials@master
