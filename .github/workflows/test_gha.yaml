@@ -8,6 +8,13 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - name: AWS Auth
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          role-to-assume: arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266
+          aws-region: us-east-2
+      - name: Validate test
+        run: aws sts get-caller-identity
       - name: Get Token
         id: get-token
         uses: actions/github-script@v6
@@ -24,10 +31,4 @@ jobs:
           --region us-east-2 \
           --output json
           aws sts get-caller-identity
-      - name: AWS Auth
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          role-to-assume: arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266
-          aws-region: us-east-2
-      - name: Validate test
-        run: aws sts get-caller-identity
+
