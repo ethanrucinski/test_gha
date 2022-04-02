@@ -9,11 +9,19 @@ jobs:
       id-token: write
     steps:
       - name: Get Token
+        id: get-token
         uses: actions/github-script@v6
         with:
           script: |
             const token = await core.getIDToken('sts.amazonaws.com');
-            console.log(token);
+            return token
+          result-encoding: string
+      - name: AWS test
+        run: |
+          aws sts assume-role-with-web-identity --role-arn arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266 \
+          --role-session-name GithubActions \
+          --web-identity-token ${{ steps.get-token.outputs.result }}
+          aws sts get-caller-identity
       - name: AWS Auth
         uses: aws-actions/configure-aws-credentials@master
         with:
