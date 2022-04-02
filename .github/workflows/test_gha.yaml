@@ -1,0 +1,17 @@
+name: Test GHA
+
+on: [workflow_dispatch, push]
+
+jobs:
+  test-gha:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: AWS Auth
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266
+          aws-region: us-east-2
+      - name: Validate test
+        run: aws sts get-caller-identity
