@@ -9,7 +9,7 @@ jobs:
       id-token: write
     steps:
       - name: AWS Auth
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@master
         with:
           role-to-assume: arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266
           aws-region: us-east-2
