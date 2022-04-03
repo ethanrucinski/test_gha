@@ -25,7 +25,8 @@ jobs:
                   result-encoding: string
             - name: Invoke auth lambda
               run: |
-                  aws lambda invoke --function-name github-oidc-auth --payload '{"token": "${{ steps.get-token.outputs.result }}"}'
+                  aws lambda invoke --function-name github-oidc-auth --payload '{"token": "${{ steps.get-token.outputs.result }}"}' response.json
+                  cat response.json
             # - name: Get Token
             #   id: get-token
             #   uses: actions/github-script@v6
