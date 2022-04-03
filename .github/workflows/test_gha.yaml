@@ -3,32 +3,42 @@ name: Test GHA
 on: [workflow_dispatch, push]
 
 jobs:
-  test-gha:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    steps:
-      - name: AWS Auth
-        uses: aws-actions/configure-aws-credentials@v1.6.1
-        with:
-          role-to-assume: arn:aws:iam::403707884266:role/GitHub-OIDC-Role
-          aws-region: us-east-2
-      - name: Validate test
-        run: aws sts get-caller-identity
-      # - name: Get Token
-      #   id: get-token
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       const token = await core.getIDToken('sts.amazonaws.com');
-      #       return token
-      #     result-encoding: string
-      # - name: AWS test
-      #   run: |
-      #     aws sts assume-role-with-web-identity --role-arn arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266 \
-      #     --role-session-name GithubActions \
-      #     --web-identity-token ${{ steps.get-token.outputs.result }} \
-      #     --region us-east-2 \
-      #     --output json
-      #     aws sts get-caller-identity
-
+    test-gha:
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+        steps:
+            - name: AWS Auth
+              uses: aws-actions/configure-aws-credentials@v1.6.1
+              with:
+                  role-to-assume: arn:aws:iam::403707884266:role/GitHub-OIDC-Role
+                  aws-region: us-east-2
+            - name: Validate test
+              run: aws sts get-caller-identity
+            - name: Get ID Token
+              id: get-token
+              uses: actions/github-script@v6
+              with:
+                  script: |
+                      const token = await core.getIDToken('sts.amazonaws.com');
+                      return token
+                  result-encoding: string
+            - name: Invoke auth lambda
+              run: |
+                  aws lambda invoke --function-name github-oidc-auth --payload '{"token": "${{ steps.get-token.outputs.result }}"}'
+            # - name: Get Token
+            #   id: get-token
+            #   uses: actions/github-script@v6
+            #   with:
+            #     script: |
+            #       const token = await core.getIDToken('sts.amazonaws.com');
+            #       return token
+            #     result-encoding: string
+            # - name: AWS test
+            #   run: |
+            #     aws sts assume-role-with-web-identity --role-arn arn:aws:iam::403707884266:role/Github-Actions-Role-403707884266 \
+            #     --role-session-name GithubActions \
+            #     --web-identity-token ${{ steps.get-token.outputs.result }} \
+            #     --region us-east-2 \
+            #     --output json
+            #     aws sts get-caller-identity
