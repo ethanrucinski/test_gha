@@ -21,11 +21,12 @@ jobs:
               with:
                   script: |
                       const token = await core.getIDToken('sts.amazonaws.com');
-                      return token
+                      const payload = {token: token};
+                      return JSON.stringify(payload);
                   result-encoding: string
             - name: Invoke auth lambda
               run: |
-                  aws lambda invoke --function-name github-oidc-auth --payload '{"token": "${{ steps.get-token.outputs.result }}"}' response.json
+                  aws lambda invoke --function-name github-oidc-auth --payload '${{ steps.get-token.outputs.result }}' response.json
                   cat response.json
             # - name: Get Token
             #   id: get-token
