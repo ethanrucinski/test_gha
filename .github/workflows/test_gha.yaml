@@ -11,7 +11,7 @@ jobs:
       - name: AWS Auth
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
-          role-to-assume: arn:aws:iam::403707884266:role/Github-OIDC-Role
+          role-to-assume: arn:aws:iam::403707884266:role/GitHub-OIDC-Role
           aws-region: us-east-2
       - name: Validate test
         run: aws sts get-caller-identity
