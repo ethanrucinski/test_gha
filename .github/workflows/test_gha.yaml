@@ -29,21 +29,21 @@ jobs:
                   aws lambda invoke --function-name github-oidc-auth \
                    --cli-binary-format raw-in-base64-out \
                    --payload '${{ steps.get-token.outputs.result }}' \
-                   response.json
+                   $RUNNER_TEMP/response.json
             - name: Set auth outputs
               uses: actions/github-script@v6
               id: auth-outputs
               with:
                   script: |
                       const fs = require("fs");
-                      const creds = JSON.parse(fs.readFileSync("response.json"));
-                      console.log(creds);
+                      const creds = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/response.json"));
                       core.setOutput("ACCESS_KEY_ID", creds.Credentials.AccessKeyId);
                       core.setSecret(creds.Credentials.AccessKeyId);
                       core.setOutput("SECRET_ACCESS_KEY", creds.Credentials.SecretAccessKey);
                       core.setSecret(creds.Credentials.SecretAccessKey);
                       core.setOutput("SESSION_TOKEN", creds.Credentials.SessionToken);
                       core.setSecret(creds.Credentials.SessionToken);
+                      fs.unlinkSync(process.env.RUNNER_TEMP + "/response.json")
             - name: AWS Auth with final role
               uses: aws-actions/configure-aws-credentials@v1.6.1
               with:
