@@ -1,4 +1,4 @@
-name: Test GHA (this workflow should fail)
+name: Test GHA (this workflow should pass)
 
 on: [workflow_dispatch, push]
 
@@ -8,7 +8,7 @@ jobs:
         permissions:
             id-token: write
         steps:
-            # This step should fail
+            # This step should pass
             - name: AWS Auth
               uses: ethanrucinski/action-aws-oidc-auth@main
               with:
