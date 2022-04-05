@@ -9,7 +9,7 @@ jobs:
             id-token: write
         steps:
             - name: AWS Auth
-              uses: ethanrucinski/action-aws-oidc-auth
+              uses: ethanrucinski/action-aws-oidc-auth@main
               with:
                 initial-role-to-assume: arn:aws:iam::403707884266:role/github-oidc-role
                 aws-region: us-east-2
