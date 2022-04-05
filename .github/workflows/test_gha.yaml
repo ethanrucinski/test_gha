@@ -49,6 +49,7 @@ jobs:
               with:
                   aws-access-key-id: ${{ steps.auth-outputs.outputs.ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ steps.auth-outputs.outputs.SECRET_ACCESS_KEY }}
+                  aws-session-token: ${{ steps.auth-outputs.outputs.SESSION_TOKEN }}
                   aws-region: us-east-2
             - name: Test final creds
               run: aws sts get-caller-identity
