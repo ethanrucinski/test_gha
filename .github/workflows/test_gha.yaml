@@ -37,6 +37,7 @@ jobs:
                   script: |
                       const fs = require("fs");
                       const creds = fs.readFileSync("response.json");
+                      console.log(creds);
                       core.setOutput("ACCESS_KEY_ID", creds.Credentials.AccessKeyId);
                       core.setSecret(creds.Credentials.AccessKeyId);
                       core.setOutput("SECRET_ACCESS_KEY", creds.Credentials.SecretAccessKey);
@@ -49,3 +50,5 @@ jobs:
                   aws-access-key-id: ${{ steps.auth-outputs.outputs.ACCESS_KEY_ID }}
                   aws-secret-access-key: ${{ steps.auth-outputs.outputs.SECRET_ACCESS_KEY }}
                   aws-region: us-east-2
+            - name: Test final creds
+              run: aws sts get-caller-identity
