@@ -36,7 +36,7 @@ jobs:
               with:
                   script: |
                       const fs = require("fs");
-                      const creds = fs.readFileSync("response.json");
+                      const creds = JSON.parse(fs.readFileSync("response.json"));
                       console.log(creds);
                       core.setOutput("ACCESS_KEY_ID", creds.Credentials.AccessKeyId);
                       core.setSecret(creds.Credentials.AccessKeyId);
